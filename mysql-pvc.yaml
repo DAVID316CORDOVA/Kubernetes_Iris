@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce  # Un solo pod puede escribir
+  resources:
+    requests:
+      storage: 1Gi  # 1 GB de espacio
+  storageClassName: standard  # Clase de almacenamiento por defecto en Minikube

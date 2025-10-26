@@ -1,0 +1,29 @@
+# ============================================
+# JOB: Tarea única (se ejecuta 1 vez y termina)
+# ============================================
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: iris-data-loader
+spec:
+  template:
+    spec:
+      restartPolicy: Never  # No reiniciar si termina
+      containers:
+      - name: python-iris
+        image: python-iris:v1
+        imagePullPolicy: Never  # Usar imagen local
+        env:
+        # Estas variables las lee el script Python
+        - name: MYSQL_HOST
+          value: "mysql-service"
+        - name: MYSQL_USER
+          value: "my_app_user"
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-password
+        - name: MYSQL_DATABASE
+          value: "my_app_db"
+  backoffLimit: 4  # Intentar máximo 4 veces si falla
